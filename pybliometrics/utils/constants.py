@@ -24,6 +24,7 @@ DEFAULT_PATHS = {
     'SerialTitle': BASE_PATH_SCOPUS/'serial_title',
     'PlumXMetrics': BASE_PATH_SCOPUS/'plumx',
     'SubjectClassifications': BASE_PATH_SCOPUS/'subject_classification',
+    'ArticleEntitlement': BASE_PATH_SCIENCEDIRECT/'article_entitlement',
     'ArticleMetadata': BASE_PATH_SCIENCEDIRECT/'article_metadata/',
     'ArticleRetrieval': BASE_PATH_SCIENCEDIRECT/'article_retrieval',
     'ScienceDirectSearch': BASE_PATH_SCIENCEDIRECT/'science_direct_search',
@@ -56,6 +57,7 @@ URLS = {
     'SerialTitle': RETRIEVAL_BASE + 'serial/title/issn/',
     'SubjectClassifications': RETRIEVAL_BASE + 'subject/scopus',
     'PlumXMetrics': 'https://api.elsevier.com/analytics/plumx/',
+    'ArticleEntitlement': RETRIEVAL_BASE + 'article/entitlement/',
     'ArticleMetadata': RETRIEVAL_BASE + 'metadata/article/',
     'ArticleRetrieval': RETRIEVAL_BASE + 'article/',
     'ScienceDirectSearch': SEARCH_BASE + 'sciencedirect/',
@@ -75,6 +77,7 @@ VIEWS = {
     "SerialSearch": ["STANDARD", "ENHANCED", "CITESCORE"],
     "SerialTitle": ["STANDARD", "ENHANCED", "CITESCORE"],
     "SubjectClassifications": [''],
+    "ArticleEntitlement": ["FULL"],
     "ArticleRetrieval": ["META", "META_ABS", "META_ABS_REF", "FULL", "ENTITLED"],
     "ArticleMetadata": ["STANDARD", "COMPLETE"],
     "ScienceDirectSearch": ["STANDARD"],
@@ -94,6 +97,7 @@ RATELIMITS = {
     'SerialTitle': 6,
     'PlumXMetrics': 6,
     'ScopusSubjectClassifications': 0,
+    'ArticleEntitlement': 0,
     'ArticleMetadata': 6,
     'ArticleRetrieval': 10,
     'ScienceDirectSearch': 2,
@@ -102,4 +106,3 @@ RATELIMITS = {
 
 # Other API restrictions
 SEARCH_MAX_ENTRIES = 5_000
-

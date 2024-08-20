@@ -33,7 +33,7 @@ class Retrieval(Base):
         """
         # Construct URL and cache file name
         url = URLS[api]
-        if api in ("AbstractRetrieval", "PlumXMetrics", "ArticleRetrieval"):
+        if api in ("AbstractRetrieval", "PlumXMetrics", "ArticleRetrieval", "ArticleEntitlement"):
             url += id_type + "/"
         if api == 'CitationOverview':
             stem = identifier.replace("/", "")
