@@ -26,6 +26,7 @@ DEFAULT_PATHS = {
     'SubjectClassifications': BASE_PATH_SCOPUS/'subject_classification',
     'ArticleMetadata': BASE_PATH_SCIENCEDIRECT/'article_metadata/',
     'ArticleRetrieval': BASE_PATH_SCIENCEDIRECT/'article_retrieval',
+    'ObjectMetadata': BASE_PATH_SCIENCEDIRECT/'object_metadata',
     'ScienceDirectSearch': BASE_PATH_SCIENCEDIRECT/'science_direct_search'
 }
 
@@ -57,6 +58,7 @@ URLS = {
     'PlumXMetrics': 'https://api.elsevier.com/analytics/plumx/',
     'ArticleMetadata': RETRIEVAL_BASE + 'metadata/article/',
     'ArticleRetrieval': RETRIEVAL_BASE + 'article/',
+    'ObjectMetadata': RETRIEVAL_BASE + 'object/',
     'ScienceDirectSearch': SEARCH_BASE + 'sciencedirect/'
 }
 
@@ -75,6 +77,7 @@ VIEWS = {
     "SubjectClassifications": [''],
     "ArticleRetrieval": ["META", "META_ABS", "META_ABS_REF", "FULL", "ENTITLED"],
     "ArticleMetadata": ["STANDARD", "COMPLETE"],
+    "ObjectMetadata": ["META"],
     "ScienceDirectSearch": ["STANDARD"]
 }
 
@@ -93,9 +96,9 @@ RATELIMITS = {
     'SubjectClassifications': 0,
     'ArticleMetadata': 6,
     'ArticleRetrieval': 10,
+    'ObjectMetadata': 0,
     'ScienceDirectSearch': 2
 }
 
 # Other API restrictions
 SEARCH_MAX_ENTRIES = 5_000
-
