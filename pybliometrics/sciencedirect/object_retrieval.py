@@ -10,12 +10,19 @@ from pybliometrics.utils import (
 )
 
 class SpecificObjectRetrieval(Retrieval):
-    def __init__(self, 
+    """Class to retrieve a specific object of a document."""
+    def __init__(self,
                  identifier: str,
                  mime_type: str,
                  id_type: str,
                  refresh: Union[bool, int] = False):
-        """Class to retrieve a specific object of a document."""
+        """Class to retrieve a specific object of a document.
+
+        :param identifier: The identifier of the object.
+        :param mime_type: The MIME type of the object.
+        :param id_type: The type of identifier supplied. Allowed values: `doi`, `pii`, `scopus_id`, `pubmed_id`, `eid`.
+        :param refresh: Whether to refresh the cached file if it exists. Default: False.
+        """
         self._view = ''
         self._refresh = refresh
         super().__init__(identifier,
@@ -26,6 +33,7 @@ class SpecificObjectRetrieval(Retrieval):
 
 
 class ObjectRetrieval(Retrieval):
+    """Class to retrieve the object metadata of a document."""
     def get_specific_object(self,
                             ref: str,
                             mime_type: Optional[str] = None,
@@ -34,17 +42,19 @@ class ObjectRetrieval(Retrieval):
         """Retrieves a specific object of a document.
 
         :param ref: The reference of the object. This is the `ref` field in the object_references.
-        :param mime_type: The MIME type of the object. If not supplied, it will be determined automatically.
-        :param img_type: Can be used ff the object is an image. The type of image to retrieve. Allowed values: `thumbnail`, `standard`, `high`.
+        :param mime_type: The MIME type of the object. If not supplied, it will be 
+        determined automatically.
+        :param img_type: Can be used ff the object is an image. The type of image to retrieve.
+        Allowed values: `thumbnail`, `standard`, `high`.
         """
         if not mime_type:
             mime_type = self._find_mime_type(ref)
-        
+
         if not img_type:
-            identifier = f'{self.identifier}/ref/{ref}/standard'
+            identifier = f'{self.identifier}/ref/{ref}'
         else:
-            identifier = f'{self.identifier}/ref/{ref}/high'
-        
+            identifier = f'{self.identifier}/ref/{ref}/{img_type}'
+
         spe_obj = SpecificObjectRetrieval(identifier=identifier,
                                           mime_type=mime_type,
                                           id_type=self.id_type,
@@ -53,7 +63,7 @@ class ObjectRetrieval(Retrieval):
 
 
     @property
-    def object_references(self):
+    def object_references(self) -> list[str]:
         """List with metadata of objects in a document. The metadata includes the `url`, `eid`,
         `ref`, `filename`, `mimetype`, `size`, `height`, `width`, and `type` of the object.
         """
@@ -102,11 +112,18 @@ class ObjectRetrieval(Retrieval):
         super().__init__(self.identifier, 'ObjectRetrieval', self.id_type)
     
 
-    def _find_mime_type(self, reference):
+    def _find_mime_type(self, reference: str) -> str:
         """Auxiliary function to find the MIME type of a specific object"""
         for ref in self.object_references:
             if ref['ref'] == reference:
                 return ref['mimetype']
         raise ValueError(f"Reference {reference} not found in object references.")
 
-    
+
+    def _find_url(self, reference: str) -> str:
+        """Auxiliary function to find the MIME type of a specific object"""
+        for ref in self.object_references:
+            if ref['ref'] == reference:
+                return ref['url']
+        raise ValueError(f"Url {reference} not found in object references.")
+

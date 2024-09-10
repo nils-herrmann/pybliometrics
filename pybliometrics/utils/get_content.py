@@ -1,7 +1,8 @@
 from typing import Type
-from requests import Session
+from requests import exceptions, Session
 from requests.adapters import HTTPAdapter
 from urllib3.util import Retry
+import xml.etree.ElementTree as ET
 
 from pybliometrics import __version__
 from pybliometrics import exception
@@ -122,6 +123,9 @@ def get_content(url, api, params=None, **kwds):
                 reason = resp.json()['message']
             except:
                 reason = ""
+        except exceptions.JSONDecodeError:
+            root = ET.fromstring(resp.content)
+            reason = root.find('.//statusText').text
         raise errors[resp.status_code](reason)
     except KeyError:
         resp.raise_for_status()
