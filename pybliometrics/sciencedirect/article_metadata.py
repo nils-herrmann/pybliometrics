@@ -44,8 +44,10 @@ class ArticleMetadata(Search):
             authors_list = [author.get('$') for author in chained_get(item, ['authors', 'author'], [])]
             authors_list = deduplicate(authors_list)
             authors = ';'.join(authors_list)
-            first_author = item.get('dc:creator')[0].get('$')
-            link = item.get('link')[0].get('@href')
+            first_author = item.get('dc:creator')
+            first_author = first_author[0].get('$') if first_author else None
+            link = item.get('link')
+            link = link[0].get('@href') if link else None
             doi = item.get("prism:doi") or item.get("dc:identifier")[4:] if item.get("dc:identifier") else None
             new = doc(authorKeywords=item.get('authkeywords'),
                     authors=authors,

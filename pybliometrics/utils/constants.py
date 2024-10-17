@@ -27,6 +27,7 @@ DEFAULT_PATHS = {
     'ArticleMetadata': BASE_PATH_SCIENCEDIRECT/'article_metadata/',
     'ArticleRetrieval': BASE_PATH_SCIENCEDIRECT/'article_retrieval',
     'ObjectMetadata': BASE_PATH_SCIENCEDIRECT/'object_metadata',
+    'ObjectRetrieval': BASE_PATH_SCIENCEDIRECT/'object_retrieval',
     'ScienceDirectSearch': BASE_PATH_SCIENCEDIRECT/'science_direct_search'
 }
 
@@ -59,6 +60,7 @@ URLS = {
     'ArticleMetadata': RETRIEVAL_BASE + 'metadata/article/',
     'ArticleRetrieval': RETRIEVAL_BASE + 'article/',
     'ObjectMetadata': RETRIEVAL_BASE + 'object/',
+    'ObjectRetrieval': RETRIEVAL_BASE + 'object/',
     'ScienceDirectSearch': SEARCH_BASE + 'sciencedirect/'
 }
 
@@ -78,6 +80,7 @@ VIEWS = {
     "ArticleRetrieval": ["META", "META_ABS", "META_ABS_REF", "FULL", "ENTITLED"],
     "ArticleMetadata": ["STANDARD", "COMPLETE"],
     "ObjectMetadata": ["META"],
+    "ObjectRetrieval": [""],
     "ScienceDirectSearch": ["STANDARD"]
 }
 
@@ -97,6 +100,7 @@ RATELIMITS = {
     'ArticleMetadata': 6,
     'ArticleRetrieval': 10,
     'ObjectMetadata': 0,
+    'ObjectRetrieval': 0,
     'ScienceDirectSearch': 2
 }
 
