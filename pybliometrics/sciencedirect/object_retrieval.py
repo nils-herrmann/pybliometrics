@@ -1,13 +1,12 @@
+"""Module to retrieve a specific object of a document."""
 from io import BytesIO
-from typing import Literal, Optional, Union
+from typing import Optional, Union
 
 from pybliometrics.sciencedirect import ArticleRetrieval
 from pybliometrics.superclasses import Retrieval
 from pybliometrics.utils import (
-    chained_get,
     check_parameter_value,
-    detect_id_type,
-    VIEWS,
+    detect_id_type
 )
 
 class ObjectRetrieval(Retrieval):
@@ -28,7 +27,8 @@ class ObjectRetrieval(Retrieval):
         :param identifier: The indentifier of the document.
         :param filename: Filename of the object to be retrieved. To get a list of all available
             objects of a document (and its corresponding filename) use the class `ObjectMetadata`.
-        :param id_type: The type of identifier supplied. Allowed values: doi, pii, scopus_id, pubmed_id, eid.
+        :param id_type: The type of identifier supplied. Allowed values:
+            `doi`, `pii`, `scopus_id`, `pubmed_id`, `eid`.
         :param refresh: Whether to refresh the cached file if it exists. Default: False.
         """
         identifier = str(identifier)
