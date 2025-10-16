@@ -132,8 +132,15 @@ def test_startingPage():
 
 
 def test_sortTitle():
-    assert co_eid.sortTitle == None
-    assert co_doi.sortTitle == None
+    expected = ['SoftwareX', 'ACS Catalysis']
+    assert co_eid.sortTitle == expected
+    assert co_doi.sortTitle == [expected[0]]
+
+
+def test_publicationName():
+    expected = ['SoftwareX', 'ACS Catalysis']
+    assert co_eid.publicationName == expected
+    assert co_doi.publicationName == [expected[0]]
 
 
 def test_title():
