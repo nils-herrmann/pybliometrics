@@ -126,6 +126,10 @@ Finally, there are bibliographic information, too:
     ['Article', 'Review']
 
 
+.. note::
+    The property `sortTitle` is an alias for `publicationName` and is maintained for backward compatibility.
+
+
 Using `pandas <https://pandas.pydata.org/>`_, you can convert the citation counts into a DataFrame as follows:
 
 .. code-block:: python

@@ -4,6 +4,11 @@ Change Log
 
 .. toctree::
 
+Unreleased
+~~~~~~~~~~
+
+* In `CitationOverview()`, fix property `sortTitle` to use `prism:publicationName` from the API response instead of the deprecated `sortTitle` field. Add `publicationName` property as a clearer alias.
+
 4.3
 ~~~
 

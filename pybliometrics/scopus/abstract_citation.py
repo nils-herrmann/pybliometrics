@@ -170,8 +170,16 @@ class CitationOverview(Retrieval):
     @property
     def sortTitle(self) -> Optional[list[Optional[str]]]:
         """Name of source the documents are published in (e.g. the Journal)."""
-        out = [e.get('sortTitle') for e in self._citeInfoMatrix]
+        out = [e.get('publicationName') for e in self._citeInfoMatrix]
         return _maybe_return_list(out)
+
+    @property
+    def publicationName(self) -> Optional[list[Optional[str]]]:
+        """Name of source the documents are published in (e.g. the Journal).
+        
+        This is an alias for sortTitle for better clarity.
+        """
+        return self.sortTitle
 
     @property
     def startingPage(self) -> Optional[list[Optional[str]]]:
