@@ -4,6 +4,8 @@ from json import dumps, loads
 from math import ceil
 from time import localtime, strftime, time
 
+from urllib.parse import parse_qs, urlparse
+
 from tqdm import tqdm
 
 from pybliometrics.exception import ScopusQueryError
@@ -53,6 +55,8 @@ class Base:
         ab_ref_retrieval = (api == 'AbstractRetrieval') and (params['view'] == 'REF')
         # Check if object retrieval
         obj_retrieval = (api == 'ObjectRetrieval')
+        # Check if serial title search (special pagination)
+        serial_search = (api == 'SerialTitleSearch')
 
         if fname.exists() and not self._refresh:
             self._mdate = mod_ts
@@ -60,6 +64,9 @@ class Base:
                 self._json = [loads(line) for line in
                               fname.read_text().split("\n") if line]
                 self._n = len(self._json)
+            elif serial_search:
+                self._json = loads(fname.read_text())
+                self._n = len(self._json['serial-metadata-response'].get('entry', []))
             elif obj_retrieval:
                 self._object = fname.read_bytes()
             else:
@@ -73,6 +80,11 @@ class Base:
                 data = _get_all_refs(url, params, verbose, resp, **kwds)
                 self._json = data
                 data = [data]
+            elif serial_search:
+                entries = _get_all_serial_results(url, params, verbose, resp, **kwds)
+                self._json = {'serial-metadata-response': {'entry': entries}}
+                self._n = len(entries)
+                data = [self._json]
             elif search_request:
                 # Get number of results
                 res = resp.json()
@@ -209,4 +221,35 @@ def _get_all_refs(url: str, params: dict, verbose: bool, resp: dict, **kwds) -> 
     if verbose:
         print(f'Total data: {len(parse_content.chained_get(data, ["abstracts-retrieval-response", "references", "reference"]))}')
 
+    return data
+
+
+def _get_all_serial_results(url: str, params: dict, verbose: bool, resp, **kwds) -> list:
+    """Get all results for `SerialTitleSearch` with pagination."""
+    res = resp.json()
+    data = res.get('serial-metadata-response', {}).get('entry', [])
+    
+    # Check for 'next' link to determine if pagination is needed
+    links = res.get('serial-metadata-response', {}).get('link', [])
+    next_link = next((l for l in links if l.get('@ref') == 'next'), None)
+    last_link = next((l for l in links if l.get('@ref') == 'last'), None)
+    
+    if not next_link or not last_link:
+        return data
+    
+    # Calculate total from last link (start + count)
+    last_url = last_link.get('@href', '')
+    parsed = parse_qs(urlparse(last_url).query)
+    last_start = int(parsed.get('start', [0])[0])
+    count = int(parsed.get('count', [params['count']])[0])
+    n_total = last_start + count
+    n_chunks = ceil(n_total / count)
+    
+    for i in tqdm(range(1, n_chunks), disable=not verbose, initial=1, total=n_chunks):
+        params['start'] = i * count
+        resp = get_content(url, 'SerialTitleSearch', params, **kwds)
+        res = resp.json()
+        entries = res.get('serial-metadata-response', {}).get('entry', [])
+        data.extend(entries)
+    
     return data
